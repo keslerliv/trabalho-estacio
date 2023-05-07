@@ -1,5 +1,5 @@
 - Instalando o projeto:
-    - Para instalar o expo na sua máquina execute no seu terminal: 
+    - Para instalar o expo na sua máquina execute no seu terminal:
     npm install -g expo-cli
 
     - Em seguida use para se registrar:
