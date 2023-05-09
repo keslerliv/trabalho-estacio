@@ -1,31 +1,17 @@
-import * as React from 'react';
-import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { StatusBar } from 'react-native';
 
-const Stack = createNativeStackNavigator();
+import {NavigationContainer} from '@react-navigation/native'
+import Routes from './src/routes'
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{
-              headerShown: false
-            }} />
-          <Stack.Screen
-            name="HomeScreen"
-            component={HomeScreen}
-            options={{
-              headerShown: false
-            }} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <StatusBar backgroundColor="#FFFFFF" barStyle= "light-content"/>
+      <Routes/>
+
+    </NavigationContainer>
   );
 }
+
+
