@@ -1,12 +1,25 @@
-import * as React from 'react';
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import ProjectInfo from '../src/components/ProjectInfo';
 import CircleItem from '../src/components/CirceItem';
 import CardStatus from '../src/components/CardStatus';
+import { getProjectList } from '../api';
 
 export default function HomeScreen() {
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            const response = await getProjectList();
+            if (response.length > 0) {
+                setItems(response);
+            }
+        };
+        fetchItems();
+    }, []);
+
     return (
-        <>
+        <ScrollView>
             <View style={styles.header}>
                 <View style={styles.headerTop}>
                     <Text style={styles.wellcomeText}>Ola, <Text style={styles.strong}>Jhon Doe</Text></Text>
@@ -34,12 +47,10 @@ export default function HomeScreen() {
                 </View>
 
                 <View style={{ marginTop: 50 }}>
-                    <CardStatus title="Home page (página inicial)" items={['Header', 'Bloco hero', 'Bloco carousel']} status={2} />
-                    <CardStatus title="Página sobre" items={['Header', 'Bloco hero', 'Bloco carousel']} status={1} />
-                    <CardStatus title="Home page" items={['Header', 'Bloco hero', 'Bloco carousel']} status={0} />
+                    {items.map((item,index) => <CardStatus title={item.fields.summary} items={item.fields.subtasks} status={item.fields.status.name} />)}
                 </View>
             </View>
-        </>
+        </ScrollView>
     );
 }
 
