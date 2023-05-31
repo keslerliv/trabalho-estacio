@@ -4,8 +4,10 @@ import ProjectInfo from '../src/components/ProjectInfo';
 import CircleItem from '../src/components/CirceItem';
 import CardStatus from '../src/components/CardStatus';
 import { getProjectList } from '../api';
+import ProjectComents from '../src/components/ProjectComents';
+import ProjectLinks from '../src/components/ProjectLinks';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -23,7 +25,7 @@ export default function HomeScreen() {
             <View style={styles.header}>
                 <View style={styles.headerTop}>
                     <Text style={styles.wellcomeText}>Ola, <Text style={styles.strong}>Jhon Doe</Text></Text>
-                    <TouchableHighlight>
+                    <TouchableHighlight onPress={() => navigation.navigate('MenuScreen')}>
                         <>
                             <View style={{ borderRadius: 5, width: 40, height: 3, backgroundColor: '#fff' }} />
                             <View style={{ borderRadius: 5, width: 40, height: 3, backgroundColor: '#fff', marginTop: 8 }} />
@@ -34,10 +36,8 @@ export default function HomeScreen() {
                 <Text style={styles.title}>Status do projeto</Text>
                 <Text style={styles.titleBold}>Blog - Hotel Ibis</Text>
             </View>
-
             <View style={styles.containerContent}>
                 <ProjectInfo />
-
                 <View style={styles.listItems}>
                     <CircleItem color={'#D9D9D9'} text={'A fazer'} />
                     <CircleItem color={'#379BD3'} text={'Em andamento'} />
@@ -45,10 +45,11 @@ export default function HomeScreen() {
                     <CircleItem color={'#D40000'} text={'Cancelado'} />
                     <CircleItem color={'#500000'} text={'Bloqueado'} />
                 </View>
-
                 <View style={{ marginTop: 50 }}>
                     {items.map((item,index) => <CardStatus title={item.fields.summary} items={item.fields.subtasks} status={item.fields.status.name} />)}
                 </View>
+                <ProjectComents cards={[{date: '00/00/0000', text: 'Lorem ipsum dolor sit'}]} />
+                <ProjectLinks  links={[{title: 'Lorem ipsum dolor', url: 'https://www.youtube.com'}]}/>
             </View>
         </ScrollView>
     );

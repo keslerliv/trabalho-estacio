@@ -17,22 +17,37 @@ export default function CardStatus({ title, items, status }) {
                 return '#500000';
             default:
                 return '#D9D9D9';
-                break;
         }
     }
 
     return (
-        <View style={{ marginBottom: 10 }}>
+        <View style={styles.container}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', gap: '10' }}>
                 <View style={{ width: 12, height: 12, borderRadius: 8, backgroundColor: getColor(), marginTop: 7 }} />
-                <Text style={{ fontSize: 20 }}>{title}</Text>
+                <Text style={styles.title}>{title}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', paddingLeft: 22, padding: 15, gap: 10 }}>
                 <View style={{ width: 3, height: '100%', backgroundColor: '#D9D9D9' }} />
                 <View>
-                    {items.map((item) => <Text style={{ fontSize: 16, lineHeight: 25 }}>{item.fields.summary}</Text>)}
+                    {items.map((item) => <Text style={styles.info}>{item.fields.summary}</Text>)}
                 </View>
             </View>
         </View>
     );
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+        paddingRight: 20
+    },
+    title: { 
+        fontSize: 20, 
+        fontWeight: 200 
+    },
+    info: { 
+        fontSize: 16, 
+        lineHeight: 25, 
+        fontWeight: 200 
+    }
+});
