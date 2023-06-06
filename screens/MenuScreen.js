@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import close from '../assets/icons/close.png';
 
-export default function MenuScreen({ navigation }) {
+export default function MenuScreen({ route, navigation }) {
+    const { uid, project } = route.params;
+
     const [showSubitems, setShowSubitems] = useState(false);
 
     const handleItem1Press = () => {
         setShowSubitems(!showSubitems);
     };
 
+    const handleCloseMenu = () => {
+        navigation.navigate("HomeScreen", { uid: uid });
+    }
+
     return (
         <ScrollView style={styles.container}>
-            <TouchableOpacity
-                onPress={() => navigation.navigate("HomeScreen")} >
+            <TouchableOpacity onPress={() => handleCloseMenu()} >
                 <Image style={styles.Image} source={close} />
             </TouchableOpacity>
             <TouchableWithoutFeedback onPress={handleItem1Press}>
@@ -23,14 +28,15 @@ export default function MenuScreen({ navigation }) {
 
             {showSubitems && (
                 <View style={styles.subitemsContainer}>
-                    <Text style={styles.subitemText}>Projeto 1</Text>
-                    <Text style={styles.subitemText}>Projeto 2</Text>
+                    <TouchableOpacity onPress={() => handleCloseMenu()} >
+                        <Text style={styles.subitemText}>{project.name}</Text>
+                    </TouchableOpacity>
                 </View>
             )}
 
             <View style={styles.profileContainer}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("UserInfoScreen")}>
+                    onPress={() => navigation.navigate("UserInfoScreen", {uid: uid})}>
                     <Text style={styles.text}>Meu Perfil</Text>
                 </TouchableOpacity>
             </View>

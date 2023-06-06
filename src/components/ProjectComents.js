@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function ProjectComents({cards}) {
+export default function ProjectComents({ cards }) {
+
+    if (!cards) {
+        return <></>;
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Observações</Text>

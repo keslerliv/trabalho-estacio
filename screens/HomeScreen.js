@@ -6,18 +6,38 @@ import CardStatus from '../src/components/CardStatus';
 import { getProjectList } from '../api';
 import ProjectComents from '../src/components/ProjectComents';
 import ProjectLinks from '../src/components/ProjectLinks';
+import { getProjects } from '../api/projects';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ route, navigation }) {
+    const { uid } = route.params;
+
     const [items, setItems] = useState([]);
+    const [project, setProject] = useState({});
+
+    const fetchItems = async (project) => {
+        const response = await getProjectList(project);
+        if (response.length > 0) {
+            setItems(response);
+        }
+    };
+
+    const getProjectsCall = async () => {
+        try {
+            const projects = await getProjects(uid);
+            const project = projects.project[0].id;
+            setProject({
+                name: projects.project[0].name,
+                id: projects.project[0].id,
+                links: projects.project[0].links,
+                comments: projects.project[0].comments,
+            })
+            fetchItems(project);
+        } catch (error) {
+        }
+    };
 
     useEffect(() => {
-        const fetchItems = async () => {
-            const response = await getProjectList();
-            if (response.length > 0) {
-                setItems(response);
-            }
-        };
-        fetchItems();
+        getProjectsCall();
     }, []);
 
     return (
@@ -25,7 +45,7 @@ export default function HomeScreen({navigation}) {
             <View style={styles.header}>
                 <View style={styles.headerTop}>
                     <Text style={styles.wellcomeText}>Ola, <Text style={styles.strong}>Jhon Doe</Text></Text>
-                    <TouchableHighlight onPress={() => navigation.navigate('MenuScreen')}>
+                    <TouchableHighlight onPress={() => navigation.navigate('MenuScreen', {uid: uid, project: project})}>
                         <>
                             <View style={{ borderRadius: 5, width: 40, height: 3, backgroundColor: '#fff' }} />
                             <View style={{ borderRadius: 5, width: 40, height: 3, backgroundColor: '#fff', marginTop: 8 }} />
@@ -34,10 +54,10 @@ export default function HomeScreen({navigation}) {
                     </TouchableHighlight>
                 </View>
                 <Text style={styles.title}>Status do projeto</Text>
-                <Text style={styles.titleBold}>Blog - Hotel Ibis</Text>
+                <Text style={styles.titleBold}>{project.name}</Text>
             </View>
             <View style={styles.containerContent}>
-                <ProjectInfo />
+                <ProjectInfo items={items} />
                 <View style={styles.listItems}>
                     <CircleItem color={'#D9D9D9'} text={'A fazer'} />
                     <CircleItem color={'#379BD3'} text={'Em andamento'} />
@@ -46,10 +66,10 @@ export default function HomeScreen({navigation}) {
                     <CircleItem color={'#500000'} text={'Bloqueado'} />
                 </View>
                 <View style={{ marginTop: 50 }}>
-                    {items.map((item,index) => <CardStatus title={item.fields.summary} items={item.fields.subtasks} status={item.fields.status.name} />)}
+                    {items.map((item, index) => <CardStatus key={index} title={item.fields.summary} items={item.fields.subtasks} status={item.fields.status.name} />)}
                 </View>
-                <ProjectComents cards={[{date: '00/00/0000', text: 'Lorem ipsum dolor sit'}]} />
-                <ProjectLinks  links={[{title: 'Lorem ipsum dolor', url: 'https://www.youtube.com'}]}/>
+                <ProjectComents cards={project.comments} />
+                <ProjectLinks links={project.links} />
             </View>
         </ScrollView>
     );

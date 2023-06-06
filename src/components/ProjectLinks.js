@@ -6,6 +6,10 @@ export default function ProjectLinks({ links }) {
         Linking.openURL(url);
     }
 
+    if(!links){
+        return <></>;
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Links úteis</Text>

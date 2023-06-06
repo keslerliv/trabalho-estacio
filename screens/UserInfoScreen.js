@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 
-const UserInfoScreen = ({ navigation }) => {
+const UserInfoScreen = ({ route, navigation }) => {
+    const { uid, project } = route.params;
+
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [cpf, setCpf] = useState('');
@@ -20,7 +22,7 @@ const UserInfoScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate("HomeScreen")}>
+                <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate("HomeScreen", {uid: uid})}>
                     <View style={styles.arrowContainer}>
                         <Icon name="arrow-left" size={25} color="#fff" />
                     </View>

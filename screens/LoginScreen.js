@@ -28,9 +28,8 @@ export default function LoginScreen({ navigation }) {
     const handleLogin = async (email, password) => {
         try {
             const user = await loginUser(email, password);
-            console.log(user);
             if (user.email) {
-                navigation.navigate("HomeScreen");
+                navigation.navigate("HomeScreen", { uid: user.uid });
             } else {
                 setError('Usuário e/ou senha incorreto.');
             }
@@ -52,7 +51,7 @@ export default function LoginScreen({ navigation }) {
                     }
 
                     <TextInput style={styles.input} placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} />
-                    <TextInput style={styles.input} placeholder="Senha" onChangeText={(value) => setPassword(value)} value={password} />
+                    <TextInput style={styles.input} placeholder="Senha" secureTextEntry={true} onChangeText={(value) => setPassword(value)} value={password} />
 
                     <View style={styles.forgotContainer}>
                         {showPopup && (
