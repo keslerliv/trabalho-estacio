@@ -6,20 +6,15 @@ import {
   Button,
 } from "react-native";
 
-const BottomPopup = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const toggleModal = () => {
-    setIsVisible(!isVisible);
-  };
+const BottomPopup = ({ status, closeModal }) => {
 
   return (
     <View>
       <Modal
-        visible={isVisible}
+        visible={status}
         animationType="slide"
         transparent={true}
-        onRequestClose={toggleModal}
+        onRequestClose={closeModal}
       >
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -29,7 +24,7 @@ const BottomPopup = () => {
               Solicite acesso a um administrador resposável para acessar a
               plataforma de acompanhamento do projeto.
             </Text>
-            <Button title="Fechar" onPress={toggleModal} />
+            <Button title="Fechar" onPress={closeModal} />
           </View>
         </View>
       </Modal>

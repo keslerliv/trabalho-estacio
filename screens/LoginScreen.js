@@ -11,16 +11,33 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
 } from "react-native";
-
 import Logo from "../assets/images/Logo.png";
 import BottomPopup from "../components/BottomPopup";
+import { loginUser } from "../api/login";
 
 export default function LoginScreen({ navigation }) {
-    const [showPopup, setShowPopup] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+    const [error, setError] = useState('');
 
     const onClosePopup = () => {
         setShowPopup(false);
     };
+
+    const handleLogin = async (email, password) => {
+        try {
+            const user = await loginUser(email, password);
+            console.log(user);
+            if (user.email) {
+                navigation.navigate("HomeScreen");
+            } else {
+                setError('Usuário e/ou senha incorreto.');
+            }
+        } catch (error) {
+            setError('Ocorreu um erro durante o login.');
+        }
+    }
 
     return (
         <KeyboardAvoidingView
@@ -30,23 +47,30 @@ export default function LoginScreen({ navigation }) {
                 <View style={styles.container}>
                     <Image style={styles.logo} source={Logo} />
 
-                    <TextInput style={styles.input} placeholder="Email" />
-                    <TextInput style={styles.input} placeholder="Senha" />
+                    {error &&
+                        <Text style={styles.errorMessage}>{error}</Text>
+                    }
+
+                    <TextInput style={styles.input} placeholder="Email" onChangeText={(value) => setEmail(value)} value={email} />
+                    <TextInput style={styles.input} placeholder="Senha" onChangeText={(value) => setPassword(value)} value={password} />
+
                     <View style={styles.forgotContainer}>
                         {showPopup && (
                             <BottomPopup
+                                status={showPopup}
+                                closeModal={() => onClosePopup()}
                                 title="Esqueceu sua senha?"
-                                onTouchOutside={onClosePopup}
+                                onTouchOutside={() => setShowPopup(false)}
                             />
                         )}
-                        <TouchableOpacity onPress={onClosePopup}>
+                        <TouchableOpacity onPress={() => setShowPopup(true)}>
                             <Text style={styles.forgotText}>Esqueceu sua senha?</Text>
                         </TouchableOpacity>
                     </View>
 
                     <TouchableOpacity
                         style={styles.loginButton}
-                        onPress={() => navigation.navigate("HomeScreen")}
+                        onPress={() => handleLogin(email, password)}
                     >
                         <Text style={styles.loginText}>Acessar</Text>
                     </TouchableOpacity>
@@ -98,4 +122,8 @@ const styles = StyleSheet.create({
         color: "#FFF",
         fontSize: 17,
     },
+    errorMessage: {
+        color: '#f00',
+        marginBottom: 20
+    }
 });
